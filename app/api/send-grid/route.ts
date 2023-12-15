@@ -42,29 +42,54 @@ import { NextResponse } from "next/server";
 // }
 
 
-import { NextApiRequest, NextApiResponse } from "next";
 import sgMail from "@sendgrid/mail";
 require("dotenv").config();
-const { SENDGRID_API_KEY } = process.env;
-sgMail.setApiKey(SENDGRID_API_KEY as string);
-console.log(process.env.SENDGRID_API_KEY);
+
+const mysql = require('mysql2');
+const connection = mysql.createConnection({
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    password: process.env.DB_PASS,
+    user: process.env.DB_USER,
+    database: process.env.DB_DATABASE,
+});
 
 export async function POST(request: Request) {
     const res = await request.json()
+
     const { name, email } = res;
 
-    const msg = {
-        from: "tanawat.chaijaroenice@gmail.com",
-        to: email, // Replace with your own email address
-        subject: "New message from your website",
-        text: 'Hello World' + name,
-    };
-
     try {
-        await sgMail.send(msg);
-        return NextResponse.json({ message: "Email sent successfully!" });
+        connection.query(
+            'SELECT Idmail, Usermail, Tokenmail, Servicemail, Hostmail, Securemail, Apikey FROM mail_config WHERE Idmail = 2',
+            async (error: any, result: any) => {
+                if (error) {
+                    console.log("Select error", error);
+                    return NextResponse.json({ message: 'ERROR', error }, { status: 500 });
+                }
+
+                console.log("result", result);
+                const msg = {
+                    from: result[0].Usermail,
+                    to: email, // Replace with your own email address
+                    subject: "New message from your website",
+                    text: 'Hello World' + name,
+                };
+
+                var SEND_GRID_API_KEY = result[0].Apikey
+
+                sgMail.setApiKey(SEND_GRID_API_KEY);
+
+                try {
+                    await sgMail.send(msg);
+                    return NextResponse.json({ message: "Email sent successfully!" });
+                } catch (error) {
+                    console.error(error);
+                    return NextResponse.json({ message: "Something went wrong." });
+                }
+            })
     } catch (error) {
-        console.error(error);
-        return NextResponse.json({ message: "Something went wrong." });
+        return NextResponse.json({ error });
     }
+    return NextResponse.json({ message: "successfully!" });
 }
