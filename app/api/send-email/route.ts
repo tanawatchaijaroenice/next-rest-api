@@ -87,7 +87,9 @@ export async function POST(request: Request) {
                 }
             }
         );
-        return NextResponse.json({ message: 'OK' }, { status: 200 });
+        return NextResponse.json({ message: 'OK' }, {
+            headers: { "Authorization": "Bearer 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" },
+        });
     } catch (error) {
         console.error("Error All", error);
         return NextResponse.json({ message: 'ERROR', error }, { status: 500 });

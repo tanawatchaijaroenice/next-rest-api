@@ -20,5 +20,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ error }, { status: 500 });
     }
 
-    return NextResponse.json({ message: 'success' });
+    return NextResponse.json({ message: 'success' }, {
+        headers: { "Authorization": "Bearer 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" },
+    });
 }
