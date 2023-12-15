@@ -43,7 +43,7 @@ import { NextResponse } from "next/server";
 
 
 import sgMail from "@sendgrid/mail";
-require("dotenv").config();
+// require("dotenv").config();
 
 const mysql = require('mysql2');
 const connection = mysql.createConnection({
@@ -56,7 +56,6 @@ const connection = mysql.createConnection({
 
 export async function POST(request: Request) {
     const res = await request.json()
-
     const { name, email } = res;
 
     try {
@@ -86,7 +85,6 @@ export async function POST(request: Request) {
                     return NextResponse.json({ message: "Something went wrong." });
                 }
             })
-            
             return NextResponse.json({ message: "Email sent successfully!" });
     } catch (error) {
         return NextResponse.json({ error });
