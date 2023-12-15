@@ -67,10 +67,9 @@ export async function POST(request: Request) {
                     console.log("Select error", error);
                     return NextResponse.json({ message: 'ERROR', error }, { status: 500 });
                 }
-
                 console.log("result", result);
                 const msg = {
-                    from: result[0].Usermail,
+                    from: 'tanawat.chaijaroenice@gmail.com',
                     to: email, // Replace with your own email address
                     subject: "New message from your website",
                     text: 'Hello World' + name,
@@ -82,14 +81,15 @@ export async function POST(request: Request) {
 
                 try {
                     await sgMail.send(msg);
-                    return NextResponse.json({ message: "Email sent successfully!" });
                 } catch (error) {
                     console.error(error);
                     return NextResponse.json({ message: "Something went wrong." });
                 }
             })
+            
+            return NextResponse.json({ message: "Email sent successfully!" });
     } catch (error) {
         return NextResponse.json({ error });
     }
-    return NextResponse.json({ message: "successfully!" });
+
 }
