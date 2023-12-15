@@ -20,15 +20,15 @@ export default function Home() {
 
   const handlePress = async () => {
     // https://cabinet-api-dev.smartfinder.asia/en/api/v1/User/SendMail
-    await fetch('/api/send-grid', {
+    // await fetch('/api/send-grid', {
+    await fetch('https://mailservice.smartfinder.asia/Mail/Send', {
       method: 'POST',
       // headers: { 'Content-Type': 'application/json', Authorization },
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name,
-        emailTo: email,
+        toEmail: email,
       }),
     });
 
