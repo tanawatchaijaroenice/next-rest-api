@@ -1,7 +1,7 @@
 import sendgrid from "@sendgrid/mail";
 import { NextResponse } from "next/server";
 
-sendgrid.setApiKey("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");
+sendgrid.setApiKey(process.env.SENDGRID_API_KEY || '');
 
 export async function POST(request: Request) {
     try {
@@ -20,7 +20,5 @@ export async function POST(request: Request) {
         return NextResponse.json({ error }, { status: 500 });
     }
 
-    return NextResponse.json({ message: 'success' }, {
-        headers: { "Authorization": "Bearer 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" },
-    });
+    return NextResponse.json({ message: 'success' });
 }
