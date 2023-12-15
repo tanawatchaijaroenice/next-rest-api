@@ -1,8 +1,9 @@
 import sendgrid from "@sendgrid/mail";
+import { NextResponse } from "next/server";
 
 sendgrid.setApiKey(process.env.SENDGRID_API_KEY ?? '');
 
-export async function POST(request: Response) {
+export async function POST(request: Request) {
     try {
         const res = await request.json()
         const { name, email } = res;
@@ -16,8 +17,8 @@ export async function POST(request: Response) {
 
     } catch (error) {
         // console.log(error);
-        return Response.json({ error }, { status: 500 });
+        return NextResponse.json({ error }, { status: 500 });
     }
 
-    return Response.json({ message: 'success' });
+    return NextResponse.json({ message: 'success' });
 }

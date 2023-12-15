@@ -1,6 +1,6 @@
 // import { EmailTemplate } from '@/components/email-template';
 import { Resend } from 'resend';
-
+import { NextResponse } from "next/server";
 
 
 export async function POST(request: Request) {
@@ -16,12 +16,12 @@ export async function POST(request: Request) {
         });
 
         if (error) {
-            return Response.json({ error }, { status: 500 });
+            return NextResponse.json({ error }, { status: 500 });
         }
 
-        return Response.json(data);
+        return NextResponse.json(data);
     } catch (error) {
-        return Response.json({ error }, { status: 500 });
+        return NextResponse.json({ error }, { status: 500 });
     }
 
 }
