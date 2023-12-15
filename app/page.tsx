@@ -1,13 +1,67 @@
+'use client'
+
 import Image from 'next/image'
+import { useState } from 'react'
 
 export default function Home() {
 
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+
+  const handleInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    if (name === 'name') {
+      setName(value);
+    }
+    if (name === 'email') {
+      setEmail(value);
+    }
+  };
+
+  const handlePress = () => {
+    fetch('/api/send-grid', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, email: email })
+    });
+  }
 
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
         Deploy {new Date().toLocaleDateString()} {new Date().toLocaleTimeString()}
+      </div>
+
+      <div>
+        <input
+          className={`appearance-none block w-full text-gray-700 border rounded p-2 text-sm mb-1 leading-tight focus:outline-none focus:bg-white`}
+          id="name"
+          type="text"
+          name="name"
+          value={name}
+          onChange={handleInput}
+        />
+      </div>
+
+      <div>
+        <input
+          className={`appearance-none block w-full text-gray-700 border rounded p-2 text-sm mb-1 leading-tight focus:outline-none focus:bg-white`}
+          id="email"
+          type="text"
+          name="email"
+          value={email}
+          onChange={handleInput}
+        />
+      </div>
+
+      <div>
+        <button
+          className={`appearance-none block w-full text-gray-700 border rounded p-2 text-sm mb-1 leading-tight focus:outline-none focus:bg-white`}
+          onClick={handlePress}
+        >
+          Send Email
+        </button>
       </div>
 
       <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">

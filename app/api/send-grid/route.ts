@@ -1,24 +1,70 @@
-import sendgrid from "@sendgrid/mail";
 import { NextResponse } from "next/server";
 
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY || '');
+// import sendgrid from "@sendgrid/mail";
+
+// sendgrid.setApiKey(process.env.SENDGRID_API_KEY || '');
+
+// export async function POST(request: Request) {
+//     try {
+//         const res = await request.json()
+//         const { name, email } = res;
+
+//         await sendgrid.send({
+//             from: 'tanawat.chaijaroenice@gmail.com', // your website email address here
+//             to: email, // Your email where you'll receive emails
+//             subject: `${name}`,
+//             html: `<div>You've got a mail</div>`,
+//         });
+
+//     } catch (error) {
+//         // console.log(error);
+//         return NextResponse.json({ error }, { status: 500 });
+//     }
+
+//     return NextResponse.json({ message: 'success' });
+// }
+
+
+
+// import { sendEmail } from "@/utils/sendEmail";
+
+// export async function POST(request: Request) {
+//     const res = await request.json()
+//     const { name, email } = res;
+
+//     try {
+//         await sendEmail({ name, email });
+//         console.log("Send Email Success!!");
+//         return NextResponse.json({ message: 'success' });
+//     } catch (error) {
+//         return NextResponse.json({ error });
+//     }
+// }
+
+
+import { NextApiRequest, NextApiResponse } from "next";
+import sgMail from "@sendgrid/mail";
+require("dotenv").config();
+const { SENDGRID_API_KEY } = process.env;
+sgMail.setApiKey(SENDGRID_API_KEY as string);
+console.log(process.env.SENDGRID_API_KEY);
 
 export async function POST(request: Request) {
+    const res = await request.json()
+    const { name, email } = res;
+
+    const msg = {
+        from: "tanawat.chaijaroenice@gmail.com",
+        to: email, // Replace with your own email address
+        subject: "New message from your website",
+        text: 'Hello World' + name,
+    };
+
     try {
-        const res = await request.json()
-        const { name, email } = res;
-
-        await sendgrid.send({
-            from: 'tanawat.chaijaroenice@gmail.com', // your website email address here
-            to: email, // Your email where you'll receive emails
-            subject: `${name}`,
-            html: `<div>You've got a mail</div>`,
-        });
-
+        await sgMail.send(msg);
+        return NextResponse.json({ message: "Email sent successfully!" });
     } catch (error) {
-        // console.log(error);
-        return NextResponse.json({ error }, { status: 500 });
+        console.error(error);
+        return NextResponse.json({ message: "Something went wrong." });
     }
-
-    return NextResponse.json({ message: 'success' });
 }
