@@ -2,7 +2,12 @@ import fetch from 'node-fetch'
 
 const SENDGRID_API = 'https://api.sendgrid.com/v3/mail/send'
 
-const sendEmail = async ({ name, email, apiKey }: any) => {
+const sendEmail = async ({ name, emailFrom, emailTo, apiKey }: any) => {
+    console.log("name", name);
+    console.log("emailFrom", emailFrom);
+    console.log("emailTo", emailTo);
+    console.log("apiKey", apiKey);
+
     await fetch(SENDGRID_API, {
         method: 'POST',
         headers: {
@@ -12,13 +17,14 @@ const sendEmail = async ({ name, email, apiKey }: any) => {
         body: JSON.stringify({
             personalizations: [{
                 to: [{
-                    email
+                    email: emailTo,
+                    name: "Tanawat Send!!"
                 }],
                 subject: 'Demo success :)'
             }],
             from: {
                 email: 'tanawat.chaijaroenice@gmail.com',
-                name: 'Test SendGrid'
+                name: emailFrom
             },
             content: [{
                 type: 'text/html',

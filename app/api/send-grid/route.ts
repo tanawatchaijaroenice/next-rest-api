@@ -47,14 +47,27 @@ import { sendEmail } from "@/utils/sendEmail";
 
 export async function POST(request: Request) {
     const res = await request.json()
-    const { name, email, apiKey } = res;
-
+    const { name, emailTo } = res;
     try {
-        await sendEmail({ name, email, apiKey });
+        connection.query(
+            'SELECT Idmail, Usermail, Tokenmail, Servicemail, Hostmail, Securemail, Apikey FROM mail_config WHERE Idmail = 2',
+            async (error: any, result: any) => {
+                if (error) {
+                    console.log("Select error", error);
+                    return NextResponse.json({ message: 'ERROR', error }, { status: 500 });
+                }
+                try {
+                    console.log("result", result)
+                    await sendEmail({ name, emailFrom: result[0].Usermail, emailTo: emailTo, apiKey: result[0].Apikey });
+                } catch (error) {
+                    return NextResponse.json({ error });
+                }
+            })
         return NextResponse.json({ message: 'Send Email Success!!' });
     } catch (error) {
         return NextResponse.json({ error });
     }
+
 }
 
 

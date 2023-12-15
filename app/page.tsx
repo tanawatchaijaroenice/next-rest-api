@@ -20,44 +20,17 @@ export default function Home() {
 
   const handlePress = async () => {
     // https://cabinet-api-dev.smartfinder.asia/en/api/v1/User/SendMail
-    const res = await fetch('https://api.sendgrid.com/v3/', {
+    await fetch('/api/send-grid', {
       method: 'POST',
       // headers: { 'Content-Type': 'application/json', Authorization },
       headers: {
         'Content-Type': 'application/json',
-        "Authorization": `Bearer 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`,
       },
       body: JSON.stringify({
-        "personalizations": [
-          {
-            "to": [
-              {
-                "email": "tanawat.smartfinder@gmail.com",
-                "name": "John Doe"
-              }
-            ],
-            "subject": "Hello, World!"
-          }
-        ],
-        "content": [
-          {
-            "type": "text/plain",
-            "value": "Heya!"
-          }
-        ],
-        "from": {
-          "email": "tanawat.chaijaroenice@gmail.com",
-          "name": "Sam Smith"
-        },
-        "reply_to": {
-          "email": "sarayut.smartfinder@gmail.com",
-          "name": "Sam Smith"
-        }
-      })
+        name,
+        emailTo: email,
+      }),
     });
-    res.json().then((data) => {
-      console.log(data);
-    })
 
     // Email.send({
     //   Host: "smtp.elasticemail.com",
