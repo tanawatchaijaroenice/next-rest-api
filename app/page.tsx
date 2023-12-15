@@ -18,12 +18,58 @@ export default function Home() {
     }
   };
 
-  const handlePress = () => {
-    fetch('/api/send-grid', {
+  const handlePress = async () => {
+    // https://cabinet-api-dev.smartfinder.asia/en/api/v1/User/SendMail
+    const res = await fetch('https://api.sendgrid.com/v3/', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: name, email: email })
+      // headers: { 'Content-Type': 'application/json', Authorization },
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": `Bearer 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`,
+      },
+      body: JSON.stringify({
+        "personalizations": [
+          {
+            "to": [
+              {
+                "email": "tanawat.smartfinder@gmail.com",
+                "name": "John Doe"
+              }
+            ],
+            "subject": "Hello, World!"
+          }
+        ],
+        "content": [
+          {
+            "type": "text/plain",
+            "value": "Heya!"
+          }
+        ],
+        "from": {
+          "email": "tanawat.chaijaroenice@gmail.com",
+          "name": "Sam Smith"
+        },
+        "reply_to": {
+          "email": "sarayut.smartfinder@gmail.com",
+          "name": "Sam Smith"
+        }
+      })
     });
+    res.json().then((data) => {
+      console.log(data);
+    })
+
+    // Email.send({
+    //   Host: "smtp.elasticemail.com",
+    //   Username: "username",
+    //   Password: "password",
+    //   To: 'them@website.com',
+    //   From: "you@isp.com",
+    //   Subject: "This is the subject",
+    //   Body: "And this is the body"
+    // }).then(
+    //   message => alert(message)
+    // );
   }
 
 
